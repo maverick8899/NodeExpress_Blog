@@ -4,8 +4,13 @@ const port = 3000;
 const morgan = require("morgan");
 const handlebars = require("express-handlebars");
 const path = require("path");
-//Init base
+const bodyParser = require("body-parser");
+const route = require("./routes");
+
 app.use(express.static(path.join(__dirname, "public")));
+
+app.use(bodyParser.urlencoded({ extended: false })); //xử lý dữ liệu gửi lên từ form HTML
+app.use(express.json()); //xử lý dữ liệu được gửi lên từ trình duyệt dưới dạng JSON.
 
 //template engine
 app.engine(
@@ -19,12 +24,8 @@ app.set("views", path.join(__dirname, "resources/views"));
 //morgan
 app.use(morgan("combined"));
 
-app.get("/", (req, res) => {
-  res.render("home"); //đưa home vào body của main
-});
-app.get("/news", (req, res) => {
-  res.render("news"); //đưa news vào body của main
-});
+//route
+route(app);
 
 app.listen(port, () => {
   console.log(`Example app listening on port http://localhost:${port}`);
