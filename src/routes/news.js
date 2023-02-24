@@ -1,10 +1,10 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const newsController = require("../app/controller/newsController");
+const newsController = require('../app/controller/newsController');
 
 //nó match từ trên xuống nên cấp cha để dưới cùng
-router.use("/:slug", newsController.show);
+router.get('/:slug', newsController.show);
 //hiểu là đây là cấp con của new '/' là mặc định đường dẫn
-router.use("/", newsController.index);
+router.get('/', newsController.index);
 
 module.exports = router;
