@@ -1,5 +1,8 @@
-@import "variable";
-
+@import 'variable';
+body {
+    font-family: 'Tilt Neon', cursive;
+    font-weight: 500;
+}
 h1 {
-  color: $color;
+    color: $color;
 }

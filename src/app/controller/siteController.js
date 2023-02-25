@@ -1,12 +1,13 @@
-const Musics = require('../model/Musics');
-
+const { multipleMongooseToObject } = require('../../utils/mongoose');
+const Music = require('../model/Music');
 class SiteController {
     //GET news
-    index(req, res) {
+    //next: chuyển luồng điều khiển từ middleware hiện tại sang middleware tiếp theo trong chuỗi middleware.
+    index(req, res, next) {
         // res.render('home');
-        Musics.find({}, function (err, musics) {
-            !err ? res.json(musics) : res.status(400).json({ error: 'ERROR! ' });
-        });
+        Music.find({})
+            .then((musics) => res.render('home', { musics: multipleMongooseToObject(musics) }))
+            .catch(next);
     }
 
     //GET show
