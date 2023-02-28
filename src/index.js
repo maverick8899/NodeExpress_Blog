@@ -1,19 +1,25 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = 8080;
 const morgan = require('morgan');
 const handlebars = require('express-handlebars');
 const path = require('path');
-const bodyParser = require('body-parser');
 const route = require('./routes');
 const db = require('./config/db');
+const cors = require('cors');
+
+//CORS-xử lý lỗi khi font-end kết nối đến
+app.use(cors());
+
 //connect db
 db.connect();
 
+//giúp Express đọc các file tĩnh như hình ảnh, file css hay js trong thư mục public
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(bodyParser.urlencoded({ extended: false })); //xử lý dữ liệu gửi lên từ form HTML
-app.use(express.json()); //xử lý dữ liệu được gửi lên từ trình duyệt dưới dạng JSON.
+//xử lý(giải mã) dữ liệu gửi lên từ client dạng x-www-form-urlencoded và Json
+app.use(express.urlencoded()); //ví dụ nếu k có cái này, res.query.params lỗi
+app.use(express.json());
 
 //template engine
 app.engine(

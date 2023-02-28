@@ -1,14 +1,17 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const slug = require('mongoose-slug-generator');
+mongoose.plugin(slug);
 
-const Music = new Schema({
-    name: { type: String, maxLength: 255 },
-    description: { type: String, maxLength: 255 },
-    image: { type: String, maxLength: 255 },
-    slug: { type: String, maxLength: 255 },
-    ID: { type: String, maxLength: 255 },
-    createdAt: { type: Date, default: Date.now },
-    updateAt: { type: Date, default: Date.now },
-});
-
+const Music = new Schema(
+    {
+        name: { type: String },
+        description: { type: String },
+        image: { type: String },
+        slug: { type: String, slug: 'name', unique: true }, //unique nếu trùng slug thì nó thêm mã cuối
+        ID: { type: String },
+    },
+    { timestamps: true },
+);
+//khai báo model với instance of Schema
 module.exports = mongoose.model('Music', Music);
