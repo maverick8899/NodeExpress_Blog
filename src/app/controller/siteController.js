@@ -9,7 +9,6 @@ class SiteController {
             .then((musics) => res.render('home', { musics: multipleMongooseToObject(musics) }))
             .catch(next);
     }
-
     //GET show
     search(req, res) {
         res.render('search');

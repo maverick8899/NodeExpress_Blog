@@ -11,7 +11,7 @@ const Music = new Schema(
         slug: { type: String, slug: 'name', unique: true }, //unique nếu trùng slug thì nó thêm mã cuối
         ID: { type: String },
     },
-    { timestamps: true },
+    { timestamps: true }, //auto add createdAt, updatedAt
 );
 //khai báo model với instance of Schema
 module.exports = mongoose.model('Music', Music);

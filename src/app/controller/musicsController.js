@@ -16,10 +16,10 @@ class MusicsController {
     store(req, res, next) {
         const formData = req.body;
         formData.image = `https://i.ytimg.com/vi/${req.body.ID}/hqdefault.jpg?sqp=-oaymwEcCPYBEIoBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCZCd3hz0Zq7Pr6MnWdyHRjhKFTcw`;
-        const music = new Music(formData);
+        const music = new Music(formData); //tạo ra một instance mới của model Music với dữ liệu từ formData.
         music
             .save()
-            .then(() => res.redirect('/'))
+            .then(() => res.redirect('/')) //điều hướng
             .catch((err) => res.send(err));
     }
 }

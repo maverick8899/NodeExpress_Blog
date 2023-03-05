@@ -8,36 +8,41 @@ const route = require('./routes');
 const db = require('./config/db');
 const cors = require('cors');
 
-//CORS-xử lý lỗi khi font-end kết nối đến
+//CORS-cho phép tất cả web truy cập,refer zalo
 app.use(cors());
 
 //connect db
 db.connect();
 
 //giúp Express đọc các file tĩnh như hình ảnh, file css hay js trong thư mục public
+//dùng node-sass biên dịch css vào thư mục public và đọc file tĩnh
 app.use(express.static(path.join(__dirname, 'public')));
 
 //xử lý(giải mã) dữ liệu gửi lên từ client dạng x-www-form-urlencoded và Json
 app.use(express.urlencoded()); //ví dụ nếu k có cái này, res.query.params lỗi
 app.use(express.json());
 
-//template engine
+//template engine: customize handlebars => hbs
 app.engine(
     'hbs',
     handlebars.engine({
         extname: '.hbs',
     }),
 );
+//set view engine là hbs (handlebars),view engine=>zalo
 app.set('view engine', 'hbs');
+
 //path.join(__dirname, arguments) nó nhận nhiều đối số cứ mỗi dấu , đại diện cho một cấp, ví dụ dùng win thì ,<=>/
 //__dirname <=> D:\VisualCode\NodeExpress_Blog\src
 app.set('views', path.join(__dirname, 'resources', 'views'));
+
 //morgan
 app.use(morgan('combined'));
 
 //route(routes:rule route,controller: class contain callback)
 route(app);
 
+//
 app.listen(port, () => {
     console.log(`App listening on port http://localhost:${port}`);
 });
