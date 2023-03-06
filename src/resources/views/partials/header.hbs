@@ -1,5 +1,5 @@
 <nav class='navbar navbar-expand-lg bg-body-tertiary' data-bs-theme='dark'>
-    <div class='container-fluid'>
+    <di class='container'>
         <a class='navbar-brand' href='/'>Navbar</a>
         <button
             class='navbar-toggler'
@@ -13,13 +13,7 @@
             <span class='navbar-toggler-icon'></span>
         </button>
         <div class='collapse navbar-collapse' id='navbarSupportedContent'>
-            <ul class='navbar-nav me-auto mb-2 mb-lg-0'>
-                <li class='nav-item'>
-                    <a class='nav-link active' aria-current='page' href='/'>Home</a>
-                </li>
-                <li class='nav-item'>
-                    <a class='nav-link' href='/musics/create'>Post Song</a>
-                </li>
+            <ul class='navbar-nav ms-auto'>
                 <li class='nav-item dropdown'>
                     <a
                         class='nav-link dropdown-toggle'
@@ -28,23 +22,26 @@
                         data-bs-toggle='dropdown'
                         aria-expanded='false'
                     >
-                        Dropdown
+                        <img
+                            src='https://avatars.githubusercontent.com/u/121775697?s=40&amp;v=4'
+                            alt='@KimBang89'
+                            size='20'
+                            height='20'
+                            width='20'
+                            data-view-component='true'
+                            class='avatar avatar-small circle'
+                            style='border-radius: 57%;'
+                        />
+                        KimBang89
                     </a>
                     <ul class='dropdown-menu'>
-                        <li><a class='dropdown-item' href='#'>Action</a></li>
-                        <li><a class='dropdown-item' href='#'>Another action</a></li>
-                        <li><hr class='dropdown-divider' /></li>
-                        <li><a class='dropdown-item' href='#'>Something else here</a></li>
+                        <a class='dropdown-item' href='/musics/create'>Post Song</a>
+                        <a class='dropdown-item' href='/me/stored/musics'>My Songs</a>
+                        <hr class='dropdown-divider' />
+                        <a class='dropdown-item' href='/'>Log out</a>
                     </ul>
                 </li>
-                <li class='nav-item'>
-                    <a class='nav-link disabled'>Disabled</a>
-                </li>
             </ul>
-            <form class='d-flex' role='search'>
-                <input class='form-control me-2' type='search' placeholder='Search' aria-label='Search' />
-                <button class='btn btn-outline-success' type='submit'>Search</button>
-            </form>
         </div>
-    </div>
+    </di>
 </nav>

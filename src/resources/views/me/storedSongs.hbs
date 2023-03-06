@@ -1,0 +1,25 @@
+<table class='table'>
+    <thead>
+        <tr>
+            <th scope='col'>ID</th>
+            <th scope='col'>Name</th>
+            <th scope='col'>Description</th>
+            <th scope='col' colspan='2'>Create_AT</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each musics}}
+            <tr>
+                {{! equivalent sum(@index,1) }}
+                <th scope='row'>{{sum @index 1}}</th>
+                <td>{{this.name}}</td>
+                <td>{{this.description}}</td>
+                <td>{{this.createdAt}}</td>
+                <td>
+                    <a href='/musics/{{this._id}}/edit' class='btn btn-primary'>Sửa</a>
+                    <a href='' class='btn btn-danger'>Xóa</a>
+                </td>
+            </tr>
+        {{/each}}
+    </tbody>
+</table>

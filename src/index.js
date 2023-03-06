@@ -7,6 +7,9 @@ const path = require('path');
 const route = require('./routes');
 const db = require('./config/db');
 const cors = require('cors');
+const methodOverride = require('method-override');
+
+app.use(methodOverride('_method'));
 
 //CORS-cho phép tất cả web truy cập,refer zalo
 app.use(cors());
@@ -27,6 +30,9 @@ app.engine(
     'hbs',
     handlebars.engine({
         extname: '.hbs',
+        helpers: {
+            sum: (a, b) => a + b,
+        },
     }),
 );
 //set view engine là hbs (handlebars),view engine=>zalo
