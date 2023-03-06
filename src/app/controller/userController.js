@@ -13,7 +13,7 @@ const handleAddUserToDB = (data) => {
             id: res.id,
             //lưu ý trường id của MongoDB là Object nên việc _id=res.id=> fail
         });
-        user.save();
+        user.save(); //insert into DB
     });
 };
 class UserController {
