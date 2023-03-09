@@ -3,6 +3,7 @@ const userController = require('../app/controller/userController');
 const router = express.Router();
 
 router.get('/paginate', userController.paginate);
+router.post('/store', userController.store);
 router.get('/', userController.index);
 
 module.exports = router;

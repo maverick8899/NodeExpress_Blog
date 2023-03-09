@@ -1,30 +1,30 @@
-const User = require('../model/User_ReactBase');
+const User = require('../model/UserModel_ReactBase');
 const axios = require('axios');
 
 const PAGE_LIMIT = 10;
-const handleAddUserToDB = (data) => {
-    data.forEach((res) => {
+const handleAddUserToDB = (arrData) => {
+    arrData.forEach((data) => {
         const user = new User({
-            password: res.password,
-            role: res.role,
-            userImage: res.userImage,
-            username: res.username,
-            email: res.email,
-            id: res.id,
+            password: data.password,
+            role: data.role,
+            userImage: data.userImage,
+            username: data.username,
+            email: data.email,
+            id: data.id,
             //lưu ý trường id của MongoDB là Object nên việc _id=res.id=> fail
         });
         user.save(); //insert into DB
     });
 };
 class UserController {
-    //GET Add to MongoDB
+    //GET /users/ Add to MongoDB
     index(req, res, next) {
         axios.get('https://63f02165271439b7fe7ad2e9.mockapi.io/api/user/users').then((response) => {
             handleAddUserToDB(response.data);
             res.send('Saved');
         });
     }
-    //GET
+    //GET /users/paginate
     paginate(req, res, next) {
         let page = req.query.page;
         let pageLimit = req.query.per_page;
@@ -42,6 +42,13 @@ class UserController {
                 .then((user) => res.json(user))
                 .catch((err) => res.status(500).json(err));
         }
+    }
+    //POST /users/store. Add user
+    store(req, res, next) {
+        const user = new User(req.body);
+        user.save()
+            .then(() => res.send('Post User is Success'))
+            .catch((err) => res.send(err));
     }
 }
 module.exports = new UserController();

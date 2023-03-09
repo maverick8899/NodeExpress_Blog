@@ -1,7 +1,7 @@
 const newRouter = require('./news');
 const siteRouter = require('./site');
 const musicsRouter = require('./musics');
-const userRouter = require('./users_ReactBase');
+const userRouter = require('./userRoute_ReactBase');
 const meRouter = require('./me');
 
 function route(app) {
