@@ -33,12 +33,14 @@ class UserController {
             page <= 0 && (page = 1);
             const amountPageSkip = (parseInt(page) - 1) * PAGE_LIMIT;
             User.find({})
+                .sort({ id: 1 })
                 .skip(amountPageSkip)
                 .limit(pageLimit || PAGE_LIMIT)
                 .then((user) => res.json(user))
                 .catch((err) => res.status(500).json(err));
         } else {
             User.find({})
+                .sort({ id: 1 })
                 .then((user) => res.json(user))
                 .catch((err) => res.status(500).json(err));
         }
@@ -48,6 +50,15 @@ class UserController {
         const user = new User(req.body);
         user.save()
             .then(() => res.send('Post User is Success'))
+            .catch((err) => res.send(err));
+    }
+    //PUT /users/update/:id
+    update(req, res, next) {
+        // User.findOne({ id: req.params.id }).then((user) => {
+        //     response.json(user);
+        // });
+        User.updateOne({ id: req.params.id }, req.body)
+            .then(() => res.json(req.body)) //điều hướng
             .catch((err) => res.send(err));
     }
 }

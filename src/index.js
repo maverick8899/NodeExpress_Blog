@@ -22,7 +22,8 @@ db.connect();
 app.use(express.static(path.join(__dirname, 'public')));
 
 //xử lý(giải mã) dữ liệu gửi lên từ client dạng x-www-form-urlencoded và Json
-app.use(express.urlencoded()); //ví dụ nếu k có cái này, res.query.params lỗi
+//ví dụ nếu k có cái này, res.query.params lỗi
+app.use(express.urlencoded({ extended: true })); //truyền vào option {extended: true} để cho phép truy cập vào các giá trị nested object và array.
 app.use(express.json());
 
 //template engine: customize handlebars => hbs
