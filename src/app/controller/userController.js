@@ -59,6 +59,12 @@ class UserController {
             .then(() => res.json(req.body))
             .catch((err) => res.send(err));
     }
+    //DELETE /users/:id/update
+    delete(req, res, next) {
+        User.deleteOne({ id: req.params.id })
+            .then(() => res.send('DELETE is successfully'))
+            .catch((err) => res.send(err));
+    }
 }
 
 module.exports = new UserController();
