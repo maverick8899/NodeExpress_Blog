@@ -16,12 +16,13 @@ const handleAddUserToDB = (arrData) => {
         user.save(); //insert into DB
     });
 };
+
 class UserController {
-    //GET /users/ Add to MongoDB
+    //GET /users/ Add data from MockAPI to mongoDB
     index(req, res, next) {
         axios.get('https://63f02165271439b7fe7ad2e9.mockapi.io/api/user/users').then((response) => {
             handleAddUserToDB(response.data);
-            res.send('Saved');
+            res.send('Add data successfully');
         });
     }
     //GET /users/paginate
@@ -49,17 +50,15 @@ class UserController {
     store(req, res, next) {
         const user = new User(req.body);
         user.save()
-            .then(() => res.send('Post User is Success'))
+            .then(() => res.send('Post User is Successfully'))
             .catch((err) => res.send(err));
     }
     //PUT /users/update/:id
     update(req, res, next) {
-        // User.findOne({ id: req.params.id }).then((user) => {
-        //     response.json(user);
-        // });
         User.updateOne({ id: req.params.id }, req.body)
-            .then(() => res.json(req.body)) //điều hướng
+            .then(() => res.json(req.body))
             .catch((err) => res.send(err));
     }
 }
+
 module.exports = new UserController();

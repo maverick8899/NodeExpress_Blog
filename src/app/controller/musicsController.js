@@ -33,6 +33,12 @@ class MusicsController {
             .then(() => res.redirect('/')) //điều hướng
             .catch((err) => res.send(err));
     }
+    //DELETE musics/:id
+    delete(req, res, next) {
+        Music.deleteOne({ id: req.params.id })
+            .then(() => res.redirect('back')) //điều hướng người dùng trở lại trang trước đó mà họ đã truy cập
+            .catch((err) => res.send(err));
+    }
 }
 
 module.exports = new MusicsController();

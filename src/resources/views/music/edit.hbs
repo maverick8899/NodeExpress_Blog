@@ -1,7 +1,7 @@
 <div class='mt-4'>
     <h3>Update song</h3>
-    {{! Form vẫn gửi đi method Post nhưng middleWare này sẽ chuyển đổi qua PUT }}
-    <form method='POST' action='/musics/{{music._id}}?_method=PUT'>
+    {{! Form vẫn gửi đi method GET nhưng middleWare này sẽ chuyển đổi qua PUT }}
+    <form action='/musics/{{music._id}}?_method=PUT'>
         <div class='mb-3'>
             <label for='name' class='form-label'>Name</label>
             <input type='text' class='form-control' value='{{music.name}}' id='name' name='name' />

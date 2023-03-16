@@ -13,7 +13,7 @@ const User = new Schema(
     },
     { timestamps: true }, //auto add createdAt, updatedAt
 );
-//khởi tạo giá trị id tự tăng, bắt đầu từ i=0 + 1; cứ thêm 1 giá trị i++
+//khởi tạo giá trị id tự tăng, bắt đầu từ 1; cứ thêm 1 giá trị i++
 User.plugin(AutoIncrement, { inc_field: 'id', start_seq: 0 });
 
 //khai báo model với instance of Schema
