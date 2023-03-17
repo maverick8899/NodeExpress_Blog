@@ -26,9 +26,13 @@ class UserController {
         });
     }
     //GET /users/paginate
-    paginate(req, res, next) {
+    async paginate(req, res, next) {
         let page = req.query.page;
-        let pageLimit = req.query.per_page;
+        let perPage = req.query.per_page;
+
+        const count = await User.countDocuments().exec();
+        const pages = Math.ceil(count / perPage);
+        //
         if (page) {
             //page <=0 sẽ lọt vào catch nên validate cho nó bằng 1, mặc định render page1
             page <= 0 && (page = 1);
@@ -36,9 +40,25 @@ class UserController {
             User.find({})
                 .sort({ id: 1 })
                 .skip(amountPageSkip)
-                .limit(pageLimit || PAGE_LIMIT)
-                .then((user) => res.json(user))
-                .catch((err) => res.status(500).json(err));
+                .limit(perPage || PAGE_LIMIT)
+                .then((users) =>
+                    res.json({
+                        data: {
+                            totalUsers: count,
+                            totalPages: pages,
+                            users: users,
+                        },
+                        EC: 0,
+                        EM: 'successfully',
+                    }),
+                )
+                .catch((err) => {
+                    res.json({
+                        data: {},
+                        EC: -1,
+                        EM: err.message,
+                    });
+                });
         } else {
             User.find({})
                 .sort({ id: 1 })
