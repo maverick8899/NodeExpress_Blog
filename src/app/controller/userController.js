@@ -1,29 +1,52 @@
-const User = require('../model/UserModel_ReactBase');
 const axios = require('axios');
 
+const User = require('../model/UserModel_ReactBase');
+
 const PAGE_LIMIT = 10;
-const handleAddUserToDB = (arrData) => {
-    arrData.forEach((data) => {
-        const user = new User({
-            password: data.password,
-            role: data.role,
-            userImage: data.userImage,
-            username: data.username,
-            email: data.email,
-            id: data.id,
-            //lưu ý trường id của MongoDB là Object nên việc _id=res.id=> fail
-        });
-        user.save(); //insert into DB
-    });
+//map sẽ trả về các promise, khi map duyệt xong thì promiseAll sẽ thực hiện các promise đó một lúc
+const handleAddUserToDB = async (arrData) => {
+    try {
+        // const users = arrData.map((data) => {
+        //     return {
+        //       password: data.password,
+        //       role: data.role,
+        //       userImage: data.userImage,
+        //       username: data.username,
+        //       email: data.email,
+        //       id: data.id,
+        //     };
+        //   });
+        //   await User.insertMany(users);
+        await Promise.all(
+            arrData.map((data) => {
+                const user = new User({
+                    password: data.password,
+                    role: data.role,
+                    userImage: data.userImage,
+                    username: data.username,
+                    email: data.email,
+                    id: data.id,
+                });
+                return user.save();
+            }),
+        );
+    } catch (err) {
+        console.error(err);
+        throw new Error('An error occurred while adding data');
+    }
 };
 
 class UserController {
     //GET /users/ Add data from MockAPI to mongoDB
-    index(req, res, next) {
-        axios.get('https://63f02165271439b7fe7ad2e9.mockapi.io/api/user/users').then((response) => {
-            handleAddUserToDB(response.data);
+    async index(req, res, next) {
+        try {
+            const response = await axios.get('https://63f02165271439b7fe7ad2e9.mockapi.io/api/user/users');
+            await handleAddUserToDB(response.data);
             res.send('Add data successfully');
-        });
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('An error occurred while adding data');
+        }
     }
     //GET /users/paginate
     async paginate(req, res, next) {

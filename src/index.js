@@ -8,6 +8,10 @@ const route = require('./routes');
 const db = require('./config/db');
 const cors = require('cors');
 const methodOverride = require('method-override');
+const cookieParser = require('cookie-parser');
+
+//decode cookies client gửi lên server req.cookies
+app.use(cookieParser());
 
 //custom method trong form khi sunmit, xem music/edit.hbs
 app.use(methodOverride('_method'));
