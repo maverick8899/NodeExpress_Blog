@@ -8,6 +8,12 @@ class MeController {
             .then((musics) => res.render('me/storedSongs', { musics: multipleMongooseToObject(musics) }))
             .catch(next);
     }
+    //GET me/trash/songs
+    recycleBinSongs(req, res, next) {
+        Music.findDeleted()
+            .then((musics) => res.render('me/recycleBin', { musics: multipleMongooseToObject(musics) }))
+            .catch(next);
+    }
 }
 
 module.exports = new MeController();

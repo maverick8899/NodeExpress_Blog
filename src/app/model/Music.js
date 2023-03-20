@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const slug = require('mongoose-slug-generator');
-mongoose.plugin(slug);
+const mongooseDelete = require('mongoose-delete');
 
 const Music = new Schema(
     {
@@ -13,5 +13,9 @@ const Music = new Schema(
     },
     { timestamps: true }, //auto add createdAt, updatedAt
 );
+//Add Plugins
+mongoose.plugin(slug);
+Music.plugin(mongooseDelete, { deletedAt: true, overrideMethods: true });
+
 //khai báo model với instance of Schema
 module.exports = mongoose.model('Music', Music);

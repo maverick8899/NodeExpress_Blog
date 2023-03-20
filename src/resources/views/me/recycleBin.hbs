@@ -1,6 +1,6 @@
 <table class='table'>
-    <h4 class='mt-1 mb-2'>My Songs</h4>
-    <a href='/me/trash/musics'>recycle bin</a>
+    <h4 class='mt-1 mb-2'>Songs is Deleted</h4>
+    <a href='/me/stored/musics' class='mt-1 mb-5'>My Songs</a>
     <thead>
         <tr>
             <th scope='col'>ID</th>
@@ -18,7 +18,7 @@
                 <td>{{this.description}}</td>
                 <td>{{this.createdAt}}</td>
                 <td>
-                    <a href='/musics/{{this._id}}/edit' class='btn btn-primary'>Edit</a>
+                    <a href='' class='btn btn-info btn-restore' data-id="{{this._id}}">Restore</a>
                     <a
                         href=''
                         class='btn btn-danger'
@@ -28,11 +28,10 @@
                     >Delete</a>
                 </td>
             </tr>
-            {{!-- khi data Empty --}}
-        {{else}} 
+        {{else}}
             <tr>
-                <td colspan='5' class='text-center'>You have not posted any songs yet!
-                    <a href='/musics/create'>Post Song</a></td>
+                <td colspan='5' class='text-center'>Trash is Empty
+                    <a href='/me/stored/musics'>My Songs</a></td>
             </tr>
         {{/each}}
     </tbody>
@@ -62,19 +61,42 @@
 </div>
 {{! Delete hidden form , tạo form ẩn đề thực hiện xóa}}
 <form name='delete-song-form' method='POST'></form>
+<form name='restore-song-form' method='POST'></form>
+{{!-- Không dùng Jquery
+    const restoreButtons = document.querySelectorAll('.btn-restore');
 
+    restoreButtons.forEach(button => {
+    button.addEventListener('click', event => {
+        event.preventDefault();
+        console.log("button clicked");
+    });});
+--}}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     const exampleModal = document.getElementById('exampleModal');
+    const restoreButtons = $('.btn-restore');
+    const restoreForm = document.forms['restore-song-form'];
+
+    restoreButtons.click(function (e) {
+        e.preventDefault();
+        const id=$(this).data('id')//lấy dữ liệu data-id của thẻ đã clicking
+          restoreForm.action = '/musics/' + id + '/restore?_method=PATCH';
+            restoreForm.submit();
+
+    }) 
 
     exampleModal.addEventListener('show.bs.modal', (event) => {
         let id;
-        let deleteForm = document.forms['delete-song-form'];
+        const deleteForm = document.forms['delete-song-form'];
+        
         const button = event.relatedTarget;
         id = button.getAttribute('data-id');
-        const btnDeleteModal = document.getElementById('btn-delete-song');
-        btnDeleteModal.onclick = function () {
-            deleteForm.action = '/musics/' + id + '?_method=DELETE';
+        const btnDeleteSong = document.getElementById('btn-delete-song');
+
+        btnDeleteSong.onclick = function () {
+            deleteForm.action = '/musics/' + id + '/force?_method=DELETE';
             deleteForm.submit();
         };
+
     });
 </script>
