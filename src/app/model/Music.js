@@ -15,6 +15,7 @@ const Music = new Schema(
 );
 //Add Plugins
 mongoose.plugin(slug);
+//thiết lập ngày xóa và ghi đè method mà mongoose-delete có lên mongoose ex:find-xuất record vs delete:false
 Music.plugin(mongooseDelete, { deletedAt: true, overrideMethods: true });
 
 //khai báo model với instance of Schema

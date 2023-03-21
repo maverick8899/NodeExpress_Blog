@@ -1,12 +1,12 @@
 <table class='table'>
     <h4 class='mt-1 mb-2'>Songs is Deleted</h4>
-    <a href='/me/stored/musics' class='mt-1 mb-5'>My Songs</a>
+    <a href='/me/stored/musics' class='mt-1 mb-5  btn bg-info-subtle'>My Songs</a>
     <thead>
         <tr>
             <th scope='col'>ID</th>
             <th scope='col'>Name</th>
             <th scope='col'>Description</th>
-            <th scope='col' colspan='2'>Create_AT</th>
+            <th scope='col' colspan='2'>Deleted_AT</th>
         </tr>
     </thead>
     <tbody>
@@ -16,7 +16,7 @@
                 <th scope='row'>{{sum @index 1}}</th>
                 <td>{{this.name}}</td>
                 <td>{{this.description}}</td>
-                <td>{{this.createdAt}}</td>
+                <td>{{this.deletedAt}}</td>
                 <td>
                     <a href='' class='btn btn-info btn-restore' data-id="{{this._id}}">Restore</a>
                     <a
@@ -45,7 +45,7 @@
                 <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
             </div>
             <div class='modal-body'>
-                Are you sure delete this song?
+                Are you sure delete this song? This action cannot be undone
             </div>
             <div class='modal-footer'>
                 <button

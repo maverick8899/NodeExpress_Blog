@@ -37,7 +37,7 @@ class MusicsController {
     }
     //DELETE musics/:id
     delete(req, res, next) {
-        Music.delete({ _id: req.params.id }) //delete của mongoose-delete(soft delete)
+        Music.delete({ _id: req.params.id }) //delete của mongoose-delete(soft delete) mehtod of mongoose-delete
             .then(() => res.redirect('back')) //điều hướng người dùng trở lại trang trước đó mà họ đã truy cập
             .catch((err) => res.send(err));
     }
@@ -49,7 +49,7 @@ class MusicsController {
     }
     //PATCH musics/:id/restore
     restore(req, res, next) {
-        Music.restore({ _id: req.params.id })
+        Music.restore({ _id: req.params.id }) //mehtod of mongoose-delete
             .then(() => res.redirect('back')) //điều hướng người dùng trở lại trang trước đó mà họ đã truy cập
             .catch((err) => res.send(err));
     }
