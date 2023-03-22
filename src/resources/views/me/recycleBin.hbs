@@ -1,41 +1,63 @@
-<table class='table'>
-    <h4 class='mt-1 mb-2'>Songs is Deleted</h4>
-    <a href='/me/stored/musics' class='mt-1 mb-5  btn bg-info-subtle'>My Songs</a>
-    <thead>
-        <tr>
-            <th scope='col'>ID</th>
-            <th scope='col'>Name</th>
-            <th scope='col'>Description</th>
-            <th scope='col' colspan='2'>Deleted_AT</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{#each musics}}
+<form method="POST" action="/musics/handle-form-restore">
+        <h4 class='mt-1 mb-2'>Songs is Deleted</h4>
+        <a href='/me/stored/musics' class='my-2 btn bg-info-subtle'>My Songs</a>
+    
+    <div class="form-check  d-flex align-items-center gap-3 my-3 pb-2 border-bottom border-info">
+                <input class="form-check-input" type="checkbox" value="" id="checkbox-all">
+                <label class="form-check-label" for="checkbox-all">
+                    Select All
+                </label>
+                {{!-- required bắt buộc phải chọn mới cho submit --}}
+                <select class="form-select w-25" aria-label="Default select example" name="actions" required>
+                <option value="">Actions</option>
+                <option value="restore">Restore</option>
+                </select>
+                <button class="btn btn-primary disabled check-all-submit-btn">Apply</button>
+            </div>
+    
+    <table class='table'>
+        <thead>
             <tr>
-                {{! equivalent sum(@index,1) }}
-                <th scope='row'>{{sum @index 1}}</th>
-                <td>{{this.name}}</td>
-                <td>{{this.description}}</td>
-                <td>{{this.deletedAt}}</td>
-                <td>
-                    <a href='' class='btn btn-info btn-restore' data-id="{{this._id}}">Restore</a>
-                    <a
-                        href=''
-                        class='btn btn-danger'
-                        data-bs-toggle='modal'
-                        data-bs-target='#exampleModal'
-                        data-id='{{this._id}}'
-                    >Delete</a>
-                </td>
+                <th scope='col'></th>
+                <th scope='col'>ID</th>
+                <th scope='col'>Name</th>
+                <th scope='col'>Description</th>
+                <th scope='col' colspan='2'>Deleted_AT</th>
             </tr>
-        {{else}}
-            <tr>
-                <td colspan='5' class='text-center'>Trash is Empty
-                    <a href='/me/stored/musics'>My Songs</a></td>
-            </tr>
-        {{/each}}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {{#each musics}}
+                <tr>
+                    <td>
+                        <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="{{this._id}}" name="musicIds[]" >
+                        </div>
+                    </td>
+                    {{! equivalent sum(@index,1) }}
+                    <th scope='row' style="width: 40px;">{{sum @index 1}}</th>
+                    <td >{{this.name}}</td>
+                    <td class="col-3">{{this.description}}</td>
+                    <td>{{this.deletedAt}}</td>
+                    <td>
+                        <a href='' class='btn btn-info btn-restore' data-id="{{this._id}}">Restore</a>
+                        <a
+                            href=''
+                            class='btn btn-danger'
+                            data-bs-toggle='modal'
+                            data-bs-target='#exampleModal'
+                            data-id='{{this._id}}'
+                        >Delete</a>
+                    </td>
+                </tr>
+            {{else}}
+                <tr>
+                    <td colspan='5' class='text-center'>Trash is Empty
+                        <a href='/me/stored/musics'>My Songs</a></td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</form>
 <!-- Modal -->
 <div class='modal fade' id='exampleModal' tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true'>
     <div class='modal-dialog'>
@@ -76,15 +98,38 @@
     const exampleModal = document.getElementById('exampleModal');
     const restoreButtons = $('.btn-restore');
     const restoreForm = document.forms['restore-song-form'];
+    const checkboxAll=$('#checkbox-all');
+    const musicItemCheckbox=$('input[name="musicIds[]"]');
+    const checkAllSubmitBtn=$('.check-all-submit-btn');
 
+    //restore button click
     restoreButtons.click(function (e) {
-        e.preventDefault();
+        e.preventDefault();//ngăn sự kiện mặc định thẻ link (load lại trang)
         const id=$(this).data('id')//lấy dữ liệu data-id của thẻ đã clicking
-          restoreForm.action = '/musics/' + id + '/restore?_method=PATCH';
-            restoreForm.submit();
-
+        restoreForm.action = '/musics/' + id + '/restore?_method=PATCH';
+        restoreForm.submit();
     }) 
-
+    //checkbox-all click change
+    checkboxAll.change(function() { 
+       let isChecked= $(this).prop('checked');//get checked của selectAll(T,F)
+       // rồi gán cho các select item
+       musicItemCheckbox.prop('checked',isChecked);
+       renderCheckAllSubmitBtn();
+    })
+    //checkbox-item click-change
+    musicItemCheckbox.change(function() {
+        const isCheckedAll= musicItemCheckbox.length=== $('input[name="musicIds[]"]:checked').length;
+        checkboxAll.prop('checked',isCheckedAll);
+        renderCheckAllSubmitBtn();
+    })
+    //enable and disabled button Apply
+    const renderCheckAllSubmitBtn=()=>{
+        const checkedCount=$('input[name="musicIds[]"]:checked').length;
+        checkedCount > 0 ? checkAllSubmitBtn.removeClass('disabled') 
+                         :checkAllSubmitBtn.addClass('disabled');
+    }
+    
+    //show modal confirm delete when click btn Delete 
     exampleModal.addEventListener('show.bs.modal', (event) => {
         let id;
         const deleteForm = document.forms['delete-song-form'];
@@ -97,6 +142,5 @@
             deleteForm.action = '/musics/' + id + '/force?_method=DELETE';
             deleteForm.submit();
         };
-
     });
 </script>

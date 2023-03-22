@@ -1,42 +1,64 @@
-<table class='table'>
-    <h4 class='mt-1 mb-2'>My Songs</h4>
-    <a href='/me/trash/musics' class="btn bg-info-subtle">recycle bin ( {{deleteCount}} )</a>
-    <thead>
-        <tr>
-            <th scope='col'>ID</th>
-            <th scope='col'>Name</th>
-            <th scope='col'>Description</th>
-            <th scope='col' colspan='2'>Create_AT</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{#each musics}}
+    <form method="POST" action="/musics//handle-form-stored">
+        <h4 class='mt-1 mb-2'>My Songs</h4>
+        <a href='/me/trash/musics' class="btn bg-info-subtle">recycle bin ( {{deleteCount}} )</a>
+    
+        <div class="form-check my-4 d-flex align-items-center gap-3">
+            <input class="form-check-input" type="checkbox" value="" id="checkbox-all">
+            <label class="form-check-label" for="checkbox-all">
+                Select All
+            </label>
+            {{!-- required bắt buộc phải chọn mới cho submit --}}
+            <select class="form-select w-25" aria-label="Default select example" name="actions" required>
+            <option value="">Actions</option>
+            <option value="delete">Delete</option>
+            </select>
+            <button class="btn btn-primary disabled check-all-submit-btn">Apply</button>
+        </div>
+    
+    <table class='table'>
+        <thead>
             <tr>
-                {{! equivalent sum(@index,1) }}
-                <th scope='row'>{{sum @index 1}}</th>
-                <td>{{this.name}}</td>
-                <td>{{this.description}}</td>
-                <td>{{this.createdAt}}</td>
-                <td>
-                    <a href='/musics/{{this._id}}/edit' class='btn btn-primary'>Edit</a>
-                    <a
-                        href=''
-                        class='btn btn-danger'
-                        data-bs-toggle='modal'
-                        data-bs-target='#exampleModal'
-                        data-id='{{this._id}}'
-                    >Delete</a>
-                </td>
+                <th  scope='col'>#</th>
+                <th scope='col'>ID</th>
+                <th scope='col'>Name</th>
+                <th scope='col'>Description</th>
+                <th scope='col' colspan='2'>Create_AT</th>
             </tr>
-            {{!-- khi data Empty --}}
-        {{else}} 
-            <tr>
-                <td colspan='5' class='text-center'>You have not posted any songs yet!
-                    <a href='/musics/create'>Post Song</a></td>
-            </tr>
-        {{/each}}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {{#each musics}}
+                <tr>
+                    <td>
+                        <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="{{this._id}}" name="musicIds[]" >
+                        </div>
+                    </td>
+                    {{! equivalent sum(@index,1) }}
+                    <th scope='row' style="width: 40px;">{{sum @index 1}}</th>
+                    <td>{{this.name}}</td>
+                    <td>{{this.description}}</td>
+                    <td>{{this.createdAt}}</td>
+                    <td>
+                        <a href='/musics/{{this._id}}/edit' class='btn btn-primary'>Edit</a>
+                        <a
+                            href=''
+                            class='btn btn-danger'
+                            data-bs-toggle='modal'
+                            data-bs-target='#exampleModal'
+                            data-id='{{this._id}}'
+                        >Delete</a>
+                    </td>
+                </tr>
+                {{!-- khi data Empty --}}
+            {{else}} 
+                <tr>
+                    <td colspan='5' class='text-center'>You have not posted any songs yet!
+                        <a href='/musics/create'>Post Song</a></td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    </form>
 <!-- Modal -->
 <div class='modal fade' id='exampleModal' tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true'>
     <div class='modal-dialog'>
@@ -62,16 +84,40 @@
 </div>
 {{! Delete hidden form , tạo form ẩn đề thực hiện xóa}}
 <form name='delete-song-form' method='POST'></form>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     const exampleModal = document.getElementById('exampleModal');
+    const checkboxAll=$('#checkbox-all');
+    const musicItemCheckbox=$('input[name="musicIds[]"]');
+    const checkAllSubmitBtn=$('.check-all-submit-btn');
 
+    //checkbox-all click-change
+    checkboxAll.change(function() { 
+       let isChecked= $(this).prop('checked');//get checked của selectAll(T,F)
+       // rồi gán cho các select item
+       musicItemCheckbox.prop('checked',isChecked);
+       renderCheckAllSubmitBtn();
+    })
+    //checkbox-item click-change
+    musicItemCheckbox.change(function() {
+        const isCheckedAll= musicItemCheckbox.length=== $('input[name="musicIds[]"]:checked').length;
+        checkboxAll.prop('checked',isCheckedAll);
+        renderCheckAllSubmitBtn();
+    })
+    //enable and disabled button Apply
+    const renderCheckAllSubmitBtn=()=>{
+        const checkedCount=$('input[name="musicIds[]"]:checked').length;
+        checkedCount > 0 ? checkAllSubmitBtn.removeClass('disabled') 
+                         :checkAllSubmitBtn.addClass('disabled');
+    }
+    //show modal confirm delete when click btn Delete 
     exampleModal.addEventListener('show.bs.modal', (event) => {
         let id;
         let deleteForm = document.forms['delete-song-form'];
         const button = event.relatedTarget;
         id = button.getAttribute('data-id');
         const btnDeleteModal = document.getElementById('btn-delete-song');
+
         btnDeleteModal.onclick = function () {
             deleteForm.action = '/musics/' + id + '?_method=DELETE';
             deleteForm.submit();

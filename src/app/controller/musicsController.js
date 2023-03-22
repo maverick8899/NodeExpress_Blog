@@ -53,6 +53,24 @@ class MusicsController {
             .then(() => res.redirect('back')) //điều hướng người dùng trở lại trang trước đó mà họ đã truy cập
             .catch((err) => res.send(err));
     }
+    //POST /music/handle-form-actions
+    handleStoredFormActions(req, res, next) {
+        switch (req.body.actions) {
+            case 'delete':
+                //$inkiểm tra xem giá trị bên trái có tồn tại trong mảng bên phải hay không
+                Music.delete({ _id: { $in: req.body.musicIds } })
+                    .then(() => res.redirect('back'))
+                    .catch((err) => res.send(err));
+                break;
+            default:
+                res.json({ action: 'Actions is invalid' });
+        }
+    }
+    handleTrashFormRestore(req, res, next) {
+        Music.restore({ _id: { $in: req.body.musicIds } })
+            .then(() => res.redirect('back'))
+            .catch((err) => res.send(err));
+    }
 }
 
 module.exports = new MusicsController();
