@@ -5,16 +5,27 @@ const Music = require('../model/Music');
 class MeController {
     //GET me/stored/songs
     storedSongs(req, res, next) {
-        Promise.all([Music.find({}), Music.countDocumentsDeleted()])
-            .then(([musics, deleteCount]) => {
-                res.render('me/storedSongs', { deleteCount, musics: multipleMongooseToObject(musics) });
+        //
+        const musics = Music.find();
+
+        if (req.query.hasOwnProperty('_sort')) {
+            musics.sort({ [req.query.column]: req.query.type });
+        }
+
+        Promise.all([musics, Music.countDocumentsDeleted(), Music.countDocuments()])
+            .then(([musics, deleteCount, amountSong]) => {
+                const renderTick = amountSong !== 0;
+                res.render('me/storedSongs', { renderTick, deleteCount, musics: multipleMongooseToObject(musics) });
             })
             .catch(next);
     }
     //GET me/trash/songs
     recycleBinSongs(req, res, next) {
-        Music.findDeleted()
-            .then((musics) => res.render('me/recycleBin', { musics: multipleMongooseToObject(musics) }))
+        Promise.all([Music.findDeleted(), Music.countDocuments(), Music.countDocumentsDeleted()])
+            .then(([musics, amountSong, amountDeleteSong]) => {
+                const renderTick = amountDeleteSong !== 0;
+                res.render('me/recycleBin', { renderTick, amountSong, musics: multipleMongooseToObject(musics) });
+            })
             .catch(next);
     }
 }

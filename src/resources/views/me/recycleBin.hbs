@@ -1,7 +1,12 @@
 <form method="POST" action="/musics/handle-form-restore">
-        <h4 class='mt-1 mb-2'>Songs is Deleted</h4>
-        <a href='/me/stored/musics' class='my-2 btn bg-info-subtle'>My Songs</a>
-    
+
+    <h4 class='mt-1 mb-2'>Songs is Deleted</h4>
+    <a href='/me/stored/musics' class='my-2 btn bg-info-subtle position-relative'>My Songs 
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{amountSong}}  
+        </span>
+    </a>
+   
     <div class="form-check  d-flex align-items-center gap-3 my-3 pb-2 border-bottom border-info">
                 <input class="form-check-input" type="checkbox" value="" id="checkbox-all">
                 <label class="form-check-label" for="checkbox-all">
@@ -11,6 +16,7 @@
                 <select class="form-select w-25" aria-label="Default select example" name="actions" required>
                 <option value="">Actions</option>
                 <option value="restore">Restore</option>
+                <option value="delete">Delete</option>
                 </select>
                 <button class="btn btn-primary disabled check-all-submit-btn">Apply</button>
             </div>
@@ -18,7 +24,9 @@
     <table class='table'>
         <thead>
             <tr>
-                <th scope='col'></th>
+                <th scope='col'> 
+                    {{#if renderTick}}<i class="fa-regular fa-square-check fa-fade"></i> {{/if}}           
+                </th>
                 <th scope='col'>ID</th>
                 <th scope='col'>Name</th>
                 <th scope='col'>Description</th>
@@ -93,6 +101,9 @@
         console.log("button clicked");
     });});
 --}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/regular.min.css" integrity="sha512-3YMBYASBKTrccbNMWlnn0ZoEOfRjVs9qo/dlNRea196pg78HaO0H/xPPO2n6MIqV6CgTYcWJ1ZB2EgWjeNP6XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/solid.min.css" integrity="sha512-bdTSJB23zykBjGDvyuZUrLhHD0Rfre0jxTd0/jpTbV7sZL8DCth/88aHX0bq2RV8HK3zx5Qj6r2rRU/Otsjk+g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     const exampleModal = document.getElementById('exampleModal');

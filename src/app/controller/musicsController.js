@@ -67,9 +67,21 @@ class MusicsController {
         }
     }
     handleTrashFormRestore(req, res, next) {
-        Music.restore({ _id: { $in: req.body.musicIds } })
-            .then(() => res.redirect('back'))
-            .catch((err) => res.send(err));
+        switch (req.body.actions) {
+            case 'delete':
+                //$inkiểm tra xem giá trị bên trái có tồn tại trong mảng bên phải hay không
+                Music.deleteOne({ _id: { $in: req.body.musicIds } })
+                    .then(() => res.redirect('back'))
+                    .catch((err) => res.send(err));
+                break;
+            case 'restore':
+                Music.restore({ _id: { $in: req.body.musicIds } })
+                    .then(() => res.redirect('back'))
+                    .catch((err) => res.send(err));
+                break;
+            default:
+                res.json({ action: 'Actions is invalid' });
+        }
     }
 }
 

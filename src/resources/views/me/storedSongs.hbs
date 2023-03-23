@@ -1,6 +1,10 @@
-    <form method="POST" action="/musics//handle-form-stored">
+   <form method="POST" action="/musics//handle-form-stored">
         <h4 class='mt-1 mb-2'>My Songs</h4>
-        <a href='/me/trash/musics' class="btn bg-info-subtle">recycle bin ( {{deleteCount}} )</a>
+        <a href='/me/trash/musics' class="btn bg-info-subtle position-relative">recycle bin
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{deleteCount}} 
+        </span>
+        </a>
     
         <div class="form-check my-4 d-flex align-items-center gap-3">
             <input class="form-check-input" type="checkbox" value="" id="checkbox-all">
@@ -10,6 +14,7 @@
             {{!-- required bắt buộc phải chọn mới cho submit --}}
             <select class="form-select w-25" aria-label="Default select example" name="actions" required>
             <option value="">Actions</option>
+
             <option value="delete">Delete</option>
             </select>
             <button class="btn btn-primary disabled check-all-submit-btn">Apply</button>
@@ -18,11 +23,19 @@
     <table class='table'>
         <thead>
             <tr>
-                <th  scope='col'>#</th>
+                <th scope='col'> 
+                    {{#if renderTick}}<i class="fa-regular fa-square-check fa-bounce"></i> {{/if}}           
+                </th>
                 <th scope='col'>ID</th>
-                <th scope='col'>Name</th>
-                <th scope='col'>Description</th>
-                <th scope='col' colspan='2'>Create_AT</th>
+                <th scope='col'>Name 
+                    {{{sortable 'name' _sort}}}
+                </th>
+                <th scope='col'>Description
+                    {{{sortable 'description' _sort}}}
+                </th>
+                <th scope='col' colspan='2'>Create_AT
+                    {{{sortable 'createdAt' _sort}}}
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -34,7 +47,7 @@
                         </div>
                     </td>
                     {{! equivalent sum(@index,1) }}
-                    <th scope='row' style="width: 40px;">{{sum @index 1}}</th>
+                    <th scope='row' style="width: 50px;">{{sum @index 1}}</th>
                     <td>{{this.name}}</td>
                     <td>{{this.description}}</td>
                     <td>{{this.createdAt}}</td>
@@ -84,6 +97,9 @@
 </div>
 {{! Delete hidden form , tạo form ẩn đề thực hiện xóa}}
 <form name='delete-song-form' method='POST'></form>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/regular.min.css" integrity="sha512-3YMBYASBKTrccbNMWlnn0ZoEOfRjVs9qo/dlNRea196pg78HaO0H/xPPO2n6MIqV6CgTYcWJ1ZB2EgWjeNP6XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/solid.min.css" integrity="sha512-bdTSJB23zykBjGDvyuZUrLhHD0Rfre0jxTd0/jpTbV7sZL8DCth/88aHX0bq2RV8HK3zx5Qj6r2rRU/Otsjk+g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     const exampleModal = document.getElementById('exampleModal');

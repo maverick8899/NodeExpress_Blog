@@ -9,12 +9,16 @@ const db = require('./config/db');
 const cors = require('cors');
 const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
+const SortMiddleWare = require('./app/middlewares/SortMiddleWare');
 
 //decode cookies client gửi lên server req.cookies
 app.use(cookieParser());
 
 //custom method trong form khi sunmit, xem music/edit.hbs
 app.use(methodOverride('_method'));
+
+//Custom middlewares
+app.use(SortMiddleWare);
 
 //CORS-cho phép tất cả web truy cập,refer zalo
 app.use(cors());
@@ -36,9 +40,31 @@ app.engine(
     'hbs',
     handlebars.engine({
         extname: '.hbs',
-        //dùng trong storedSongs
+        //dùng trong Views
         helpers: {
             sum: (a, b) => a + b,
+            sortable: (field, sort) => {
+                //xem column match với field clicked thì change mode
+                console.log(field, sort.column);
+                const icons = {
+                    default: '<i class="fa-sharp fa-solid fa-sort"></i>',
+                    desc: '<i class="ps-1 fa-solid fa-arrow-down-wide-short"></i>',
+                    asc: '<i class="fa-solid fa-arrow-up-short-wide"></i>',
+                };
+                const types = {
+                    default: 'desc',
+                    asc: 'desc',
+                    desc: 'asc',
+                };
+                //
+                const sortType = field === sort.column ? sort.type : 'default';
+                const icon = icons[sortType];
+                const type = types[sortType];
+
+                return `<a href="?_sort&column=${field}&type=${type}">
+                    ${icon}
+                </a>`;
+            },
         },
     }),
 );
