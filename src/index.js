@@ -17,7 +17,7 @@ app.use(cookieParser());
 //custom method trong form khi sunmit, xem music/edit.hbs
 app.use(methodOverride('_method'));
 
-//Custom middlewares
+//Custom middlewares,nào đặt trước thì chạy trước, các mw sau có thể nhận giá trị từ res. & req. từ this
 app.use(SortMiddleWare);
 
 //CORS-cho phép tất cả web truy cập,refer zalo
@@ -41,31 +41,7 @@ app.engine(
     handlebars.engine({
         extname: '.hbs',
         //dùng trong Views
-        helpers: {
-            sum: (a, b) => a + b,
-            sortable: (field, sort) => {
-                //xem column match với field clicked thì change mode
-                console.log(field, sort.column);
-                const icons = {
-                    default: '<i class="fa-sharp fa-solid fa-sort"></i>',
-                    desc: '<i class="ps-1 fa-solid fa-arrow-down-wide-short"></i>',
-                    asc: '<i class="fa-solid fa-arrow-up-short-wide"></i>',
-                };
-                const types = {
-                    default: 'desc',
-                    asc: 'desc',
-                    desc: 'asc',
-                };
-                //
-                const sortType = field === sort.column ? sort.type : 'default';
-                const icon = icons[sortType];
-                const type = types[sortType];
-
-                return `<a href="?_sort&column=${field}&type=${type}">
-                    ${icon}
-                </a>`;
-            },
-        },
+        helpers: require('./helpers/handlebars'),
     }),
 );
 //set view engine là hbs (handlebars),view engine=>zalo

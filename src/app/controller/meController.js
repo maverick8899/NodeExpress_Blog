@@ -5,14 +5,7 @@ const Music = require('../model/Music');
 class MeController {
     //GET me/stored/songs
     storedSongs(req, res, next) {
-        //
-        const musics = Music.find();
-
-        if (req.query.hasOwnProperty('_sort')) {
-            musics.sort({ [req.query.column]: req.query.type });
-        }
-
-        Promise.all([musics, Music.countDocumentsDeleted(), Music.countDocuments()])
+        Promise.all([Music.find().sortable(req), Music.countDocumentsDeleted(), Music.countDocuments()])
             .then(([musics, deleteCount, amountSong]) => {
                 const renderTick = amountSong !== 0;
                 res.render('me/storedSongs', { renderTick, deleteCount, musics: multipleMongooseToObject(musics) });

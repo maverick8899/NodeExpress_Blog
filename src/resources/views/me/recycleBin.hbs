@@ -27,10 +27,18 @@
                 <th scope='col'> 
                     {{#if renderTick}}<i class="fa-regular fa-square-check fa-fade"></i> {{/if}}           
                 </th>
-                <th scope='col'>ID</th>
-                <th scope='col'>Name</th>
-                <th scope='col'>Description</th>
-                <th scope='col' colspan='2'>Deleted_AT</th>
+               <th scope='col' style="width: 60px;">ID
+                     {{#if renderTick}} {{{sortable '_id' _sort}}} {{/if}} 
+                </th>
+                <th scope='col'>Name 
+                     {{#if renderTick}} {{{sortable 'name' _sort}}} {{/if}} 
+                </th>
+                <th scope='col'>Description
+                     {{#if renderTick}} {{{sortable 'description' _sort}}} {{/if}} 
+                </th>
+                <th scope='col' colspan='2'>Create_AT
+                     {{#if renderTick}} {{{sortable 'createdAt' _sort}}} {{/if}} 
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -42,7 +50,7 @@
                         </div>
                     </td>
                     {{! equivalent sum(@index,1) }}
-                    <th scope='row' style="width: 40px;">{{sum @index 1}}</th>
+                    <th scope='row' style="width: 40px;">{{this._id}}</th>
                     <td >{{this.name}}</td>
                     <td class="col-3">{{this.description}}</td>
                     <td>{{this.deletedAt}}</td>
